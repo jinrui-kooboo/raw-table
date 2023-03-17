@@ -3,7 +3,7 @@
     <raw-table :data="data">
       <raw-table-column prop="name" label="Name"></raw-table-column>
       <raw-table-column prop="age" label="Age">
-        <template #default="scope">{{ scope }}</template>
+        <template #default="scope">{{ scope.row.age + "1" }}</template>
       </raw-table-column>
     </raw-table>
   </div>
