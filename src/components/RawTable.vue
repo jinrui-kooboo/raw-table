@@ -1,9 +1,9 @@
 <template>
   <div class="raw-table">
     <table cellspacing="0" border="0" cellpadding="0">
-      <div class="hidden-columns" ref="hiddenColumns">
+      <!-- <div class="hidden-columns" ref="hiddenColumns">
         <slot></slot>
-      </div>
+      </div> -->
       <thead>
         <tr>
           <th v-for="field in columns" :key="field.prop">{{ field.label }}</th>
@@ -12,7 +12,9 @@
       <tbody>
         <tr v-for="(row, idx) in data" :key="idx">
           <td v-for="field in columns" :key="field.prop">
-            {{ row[field.prop] }}
+            <slot :$index="idx" :row="row">
+              {{ row[field.prop] }}
+            </slot>
           </td>
         </tr>
       </tbody>

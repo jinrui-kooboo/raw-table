@@ -1,6 +1,6 @@
 <template>
   <div>
-    <slot v-bind="scope"></slot>
+    <slot :$index="index" :row="tableData[index]"></slot>
   </div>
 </template>
 
@@ -28,12 +28,6 @@ export default {
       return this.$parent.$children
         .filter((c) => c.$options.name === "RawTableColumn")
         .indexOf(this);
-    },
-    scope() {
-      return {
-        $index: this.index,
-        row: this.tableData[this.index],
-      };
     },
   },
 };
