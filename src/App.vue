@@ -1,17 +1,37 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <raw-table :data="data">
+      <raw-table-column prop="name" label="Name"></raw-table-column>
+      <raw-table-column prop="age" label="Age">
+        <template #default="scope">{{ scope.row.age + " 岁" }}</template>
+      </raw-table-column>
+    </raw-table>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import RawTable from "./components/RawTable.vue";
+import RawTableColumn from "./components/RawTableColumn.vue";
 
 export default {
   name: "App",
+  data() {
+    return {
+      data: [
+        {
+          name: "Kangkang",
+          age: 18,
+        },
+        {
+          name: "Michael",
+          age: 17,
+        },
+      ],
+    };
+  },
   components: {
-    HelloWorld,
+    RawTable,
+    RawTableColumn,
   },
 };
 </script>
