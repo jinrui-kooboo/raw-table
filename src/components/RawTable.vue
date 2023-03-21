@@ -1,51 +1,64 @@
-<template>
-  <div class="raw-table">
-    <table cellspacing="0" border="0" cellpadding="0">
-      <div class="hidden-columns" ref="hiddenColumns">
-        <slot></slot>
-      </div>
-      <thead>
-        <tr>
-          <th v-for="field in columns" :key="field.prop">{{ field.label }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(row, idx) in data" :key="idx">
-          <td v-for="field in columns" :key="field.prop">
-            {{ row[field.prop] }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</template>
-
 <script>
 export default {
   name: "RawTable",
+  provide() {
+    return {
+      pushColumn: this.pushColumn,
+    };
+  },
+
   props: {
     data: {
       type: Array,
-      hiddenColumns: null,
-      required: true,
-      templates: null,
+      default: () => [],
     },
+  },
+  data() {
+    return {
+      columns: [],
+    };
+  },
+  created() {
+    this.columns.length = 0;
   },
   mounted() {
     console.log(this);
   },
-  computed: {
-    columnNode() {
-      return this.$slots.default.filter(
-        (node) => node?.componentOptions?.tag === "raw-table-column"
-      );
+  methods: {
+    pushColumn(column) {
+      this.columns.push(column);
     },
-    columns() {
-      return this.columnNode.map((c) => ({ ...c.componentOptions?.propsData }));
-    },
-    // templates() {
-    //   return [...this.$refs.hiddenColumns.childNodes];
-    // },
+  },
+  render() {
+    return (
+      <div class="raw-table">
+        <div style={{ display: "none" }}>{this.$slots.default}</div>
+        <table cellspacing="0" border="0" cellpadding="0">
+          <thead>
+            <tr>
+              {this.columns.map((item) => (
+                <th>{item.label}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {this.data.map((item) => {
+              return (
+                <tr>
+                  {this.columns.map((column) => {
+                    const data = {
+                      column: { ...column },
+                      row: item,
+                    };
+                    return <td>{column.renderCell(data)}</td>;
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    );
   },
 };
 </script>
@@ -62,9 +75,6 @@ $borderColor: #c2c2c2;
   table {
     border-collapse: separate;
     width: 100%;
-    .hidden-columns {
-      display: none;
-    }
     td,
     th {
       border-right: 1px solid $borderColor;

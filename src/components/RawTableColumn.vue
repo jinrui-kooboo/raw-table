@@ -1,12 +1,10 @@
-<template>
-  <div>
-    <slot :$index="index" :row="tableData[index]"></slot>
-  </div>
-</template>
-
 <script>
 export default {
   name: "RawTableColumn",
+  inject: ["pushColumn"],
+  render(h) {
+    return h("div", this.$slots.default);
+  },
   props: {
     prop: {
       type: String,
@@ -19,16 +17,21 @@ export default {
   },
   created() {
     console.log(this);
-  },
-  computed: {
-    tableData() {
-      return this.$vnode.context?.data ?? [];
-    },
-    index() {
-      return this.$parent.$children
-        .filter((c) => c.$options.name === "RawTableColumn")
-        .indexOf(this);
-    },
+    let item = {
+      prop: this.prop,
+      label: this.label,
+    };
+    item.renderCell = (rowData) => {
+      let children = null;
+      if (this.$scopedSlots.default) {
+        children = this.$scopedSlots.default(rowData);
+      } else {
+        const { row, column } = rowData;
+        children = row[column.prop];
+      }
+      return <div>{children}</div>;
+    };
+    this.pushColumn(item);
   },
 };
 </script>
