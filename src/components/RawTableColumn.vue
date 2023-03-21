@@ -2,9 +2,6 @@
 export default {
   name: "RawTableColumn",
   inject: ["pushColumn"],
-  render(h) {
-    return h("div", this.$slots.default);
-  },
   props: {
     prop: {
       type: String,
@@ -16,22 +13,24 @@ export default {
     },
   },
   created() {
-    console.log(this);
     let item = {
       prop: this.prop,
       label: this.label,
     };
-    item.renderCell = (rowData) => {
+    item.renderCell = (h, rowData) => {
       let children = null;
-      if (this.$scopedSlots.default) {
-        children = this.$scopedSlots.default(rowData);
+      if (this.$slots.default) {
+        children = this.$slots.default(rowData);
       } else {
         const { row, column } = rowData;
         children = row[column.prop];
       }
-      return <div>{children}</div>;
+      return h("div", children);
     };
     this.pushColumn(item);
+  },
+  render(h) {
+    return h("div", this.$slots.default);
   },
 };
 </script>

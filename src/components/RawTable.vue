@@ -21,44 +21,45 @@ export default {
   created() {
     this.columns.length = 0;
   },
-  mounted() {
-    console.log(this);
-  },
   methods: {
     pushColumn(column) {
       this.columns.push(column);
     },
   },
-  render() {
-    return (
-      <div class="raw-table">
-        <div style={{ display: "none" }}>{this.$slots.default}</div>
-        <table cellspacing="0" border="0" cellpadding="0">
-          <thead>
-            <tr>
-              {this.columns.map((item) => (
-                <th>{item.label}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {this.data.map((item) => {
-              return (
-                <tr>
-                  {this.columns.map((column) => {
-                    const data = {
-                      column: { ...column },
-                      row: item,
-                    };
-                    return <td>{column.renderCell(data)}</td>;
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+  render(h) {
+    const thead = h("thead", [
+      h(
+        "tr",
+        this.columns.map((column) => h("th", column.label))
+      ),
+    ]);
+    const tbody = h(
+      "tbody",
+      this.data.map((row) =>
+        h(
+          "tr",
+          this.columns.map((column) => {
+            const data = {
+              column: { ...column },
+              row: row,
+            };
+            return h("td", column.renderCell(h, data));
+          })
+        )
+      )
     );
+    return h("div", { class: "raw-table" }, [
+      h("div", this.$slots.default),
+      h(
+        "table",
+        {
+          border: 0,
+          cellspacing: 0,
+          cellpadding: 0,
+        },
+        [thead, tbody]
+      ),
+    ]);
   },
 };
 </script>
