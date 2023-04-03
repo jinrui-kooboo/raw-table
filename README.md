@@ -1,5 +1,9 @@
 # raw-table
 
+Simplified ElementUI table component:
+
+![](https://github.com/jinrui-kooboo/raw-table/blob/main/src/assets/demo.png)
+
 ## Project setup
 ```
 pnpm install
@@ -10,15 +14,3 @@ pnpm install
 pnpm run serve
 ```
 
-### Compiles and minifies for production
-```
-pnpm run build
-```
-
-### Lints and fixes files
-```
-pnpm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
