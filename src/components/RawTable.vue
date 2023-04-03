@@ -43,7 +43,7 @@ export default {
               column: { ...column },
               row: row,
             };
-            return h("td", column.renderCell(h, data));
+            return h("td", column.getTemplate(data));
           })
         )
       )

@@ -17,20 +17,22 @@ export default {
       prop: this.prop,
       label: this.label,
     };
-    item.renderCell = (h, rowData) => {
+    item.getTemplate = (rowData) => {
       let children = null;
-      if (this.$slots.default) {
-        children = this.$slots.default(rowData);
+      if (this.$scopedSlots.default) {
+        // custom default template => VNode[]
+        children = this.$scopedSlots.default(rowData);
       } else {
+        // default slot result => text string
         const { row, column } = rowData;
         children = row[column.prop];
       }
-      return h("div", children);
+      return children;
     };
     this.pushColumn(item);
   },
   render(h) {
-    return h("div", this.$slots.default);
+    return h("template");
   },
 };
 </script>
