@@ -49,7 +49,7 @@ export default {
       )
     );
     return h("div", { class: "raw-table" }, [
-      h("div", this.$slots.default),
+      h("div", { class: "hidden" }, this.$slots.default),
       h(
         "table",
         {
@@ -72,6 +72,9 @@ $borderColor: #c2c2c2;
   border: 1px solid $borderColor;
   &:hover {
     overflow: overlay;
+  }
+  .hidden {
+    display: none;
   }
   table {
     border-collapse: separate;

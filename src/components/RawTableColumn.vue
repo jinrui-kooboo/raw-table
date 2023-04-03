@@ -32,7 +32,7 @@ export default {
     this.pushColumn(item);
   },
   render(h) {
-    return h("template");
+    return h("div", this.$slots.default);
   },
 };
 </script>
